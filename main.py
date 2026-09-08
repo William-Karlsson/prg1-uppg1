@@ -1,63 +1,71 @@
-# regler:
-# Spelaren har en tärning (vanlig D6)
-# Resultatet ska efter varje kast läggas på en totalsumma
-# Efter varje kast får spelaren välja om hen vill kasta igen eller sluta kasta
-# Målet är att komma så nära 21 som möjligt
-# Om spelaren kommer över 21 så förlorar hen
-# Får spelaren exakt 21 så vinner hen
-# Stannar spelaren innan 21 får du bestämma vad som händer!
+import time
 
-import random
+from core.visuals.color import colors
+from server import start_server
+from core.player_card import load_data, save_data
+from core.reused_info import start_money
 
-class colors:
-    BLUE = '\033[94m'
-    CYAN = '\033[96m'
-    RED = '\033[31m'
-    GREEN = '\033[92m'
-    PURPLE = '\x1b[35m'
-    ENDC = '\033[0m'
+from core.gamemodes.single_player import play_single_player
 
-def intro():
-    print(f'{colors.GREEN}Välkommen till 21!{colors.ENDC}\n')
+# Hantera om det är första gången spelaren öppnar appen
 
-    print("Målet är att komma så nära 21 som möjligt utan att gå över.")
-    print("Du kastar en tärning (D6) och kan välja att kasta igen eller stanna.")
-    print("Om du går över 21 förlorar du, om du får exakt 21 vinner du!\n")
+def handle_first_open():
+    print(f"{colors.GREEN}Välkommen till Tärningspelet, nykommare!{colors.ENDC}")
 
-    print(f'{colors.CYAN}Lycka till!{colors.ENDC}\n')
+    print("Detta spel går ut på att slå tärningar! Väldigt glad att ha dig här idag.")
+
+    print("För att diverse funktioner ska fungera korrekt krävs för lite information från dig!")
+    print("\n")
+
+    name = input(f"{colors.CYAN}Ange ditt användarnamn: {colors.ENDC}")
+    slogan = input(f"{colors.CYAN}Ange din slogan(Vad som sägs till andra spelare när du vinner): {colors.ENDC}")
+
+    player_information = {
+        "name": name,
+        "slogan": slogan,
+        "money": start_money(),
+        "won-games": 0,
+        "lost-games": 0,
+        "total-games": 0
+    }
+
+    save_data(player_information)
+
+    print(f"{colors.GREEN}Tack! Välkommen till Tärningsspelet, {name}!")
+
+    time.sleep(5)
+
+json = load_data()
+
+if json == {}:
+    handle_first_open()
+    
+
+# Meny-logik
+
+menu_text = ["En spelare", "Två spelare(lokalt)", "Två spelare(mot bot)", "Online", "Stäng programmet"]
+
+meny_functions = [play_single_player]
+
+def menu():
+    print(f"{colors.GREEN}Välkommen till tärningsspelet!{colors.ENDC} Vänligen välj ett alternativ för att köra igång!")
+
+    for i in range(0, len(menu_text)):
+        print(f"{colors.PURPLE}[{colors.ENDC}{i + 1}{colors.PURPLE}]{colors.ENDC} {menu_text[i]}")
+
+    prompt()
 
 def prompt():
-    while True:
-        choice = input("Vill du kasta tärningen? (ja/nej): ").strip().lower()
-        if choice in ['ja', 'nej']:
-            return choice
-        else:
-            print(f"{colors.RED}Ogiltigt val. Vänligen skriv 'ja' eller 'nej'.{colors.ENDC}")
+    chosen_option = input(f"Välj ett alternativ({colors.CYAN}1 - {len(menu_text)}{colors.ENDC}): ")
 
-def spel():
-    total = 0
+    try:
+        chosen_option = int(chosen_option)
 
-    while True:
-        choice = prompt()
-        if choice == 'nej':
-            print(f"{colors.PURPLE}Du valde att stanna med totalsumman: {total}.{colors.ENDC}")
-            break
+        if chosen_option > len(meny_functions) or chosen_option < 0: raise Exception
 
-        kast = random.randint(1, 6)
-        total += kast
-        print(f"{colors.BLUE}Du kastade: {kast}. Totalsumma: {total}.{colors.ENDC}")
+        meny_functions[chosen_option - 1]()
+    except:
+        print(f"{colors.RED}Någonting gick fel! Vänligen skriv ett nummer på nytt.{colors.ENDC}")
+        prompt()
 
-        if total > 21:
-            print(f"{colors.RED}Du gick över 21! Du förlorade.{colors.ENDC}")
-            break
-        elif total == 21:
-            print(f"{colors.GREEN}Grattis! Du fick exakt 21 och vann!{colors.ENDC}")
-            break
-
-    if total < 21:
-        # PUNISHMENTTTT
-        print('Straff för att inte ta sig till 21 kommer senare, detta är här som placeholder för det.')
-
-
-intro()
-spel()
+menu()
