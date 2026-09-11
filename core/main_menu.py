@@ -4,19 +4,16 @@ from core.visuals.clear_screen import clear_screen
 
 from core.gamemodes.single_player import play_single_player
 from core.gamemodes.online_multiplayer.online_multiplayer_core import play_online_multiplayer
+from core.player_profile_viewer import view_player_profile
 
-menu_text = ["En spelare", "Två spelare(lokalt)", "Två spelare(mot bot)", "Online", "Stäng programmet", "Radera spelardata från hårddisk"]
-
-def temp():
-    # do nothing
-    return
+menu_text = ["En spelare", "Online", "Stäng programmet", "Radera spelardata från hårddisk", "Visa spelarprofil"]
 
 def delete_save():
     from main import handle_first_open
     delete_save_file()
     handle_first_open()
 
-menu_functions = [play_single_player, temp(), temp(), play_online_multiplayer, quit, delete_save]
+menu_functions = [play_single_player, play_online_multiplayer, quit, delete_save, view_player_profile]
 
 def display_main_menu():
     clear_screen()

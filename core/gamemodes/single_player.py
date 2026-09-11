@@ -1,12 +1,3 @@
-# regler:
-# Spelaren har en tärning (vanlig D6)
-# Resultatet ska efter varje kast läggas på en totalsumma
-# Efter varje kast får spelaren välj om hen vill kasta igen eller sluta kasta
-# Målet är att komma så nära 21 som möjligt
-# Om spelaren kommer över 21 så förlorar hen
-# Får spelaren exakt 21 så vinner hen
-# Stannar spelaren innan 21 får du bestämma vad som händer!
-
 import random
 from core.visuals.color import colors
 from core.visuals.clear_screen import clear_screen

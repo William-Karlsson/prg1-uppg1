@@ -16,7 +16,10 @@ def ask_port():
         port = int(port)
     except:
         print(f"{colors.RED}Vänligen skriv ett (int) nummer.{colors.ENDC}")
-        handle_start_server()
+        time.sleep(5)
+
+        from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+        display_online_menu()
     
     return port
 
@@ -75,7 +78,10 @@ def try_connect_to_address(address, attempts):
                     time.sleep(3)
                 else:
                     print(f"{colors.RED}Kunde inte koppla upp till server, vänligen prova en annan address eller se till att servern går att nå.{colors.ENDC}")
-                    ask_server_address()
+                    time.sleep(5)
+
+                    from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+                    display_online_menu()
         except:
             tried_attempts += 1
 

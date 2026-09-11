@@ -1,4 +1,3 @@
-import json 
 import requests
 import time
 import datetime
@@ -7,7 +6,7 @@ import random
 
 from core.visuals.clear_screen import clear_screen
 from core.visuals.color import colors
-from core.save_data import load_data, save_data
+from core.save_data import load_data, save_data, increase_lost_games, increase_won_games
 
 def intro():
 
@@ -27,39 +26,47 @@ def intro():
     print("Du kan även trycka på 'r' för att ladda om listan på spelare!")
 
 def start_multiplayer_game(server_address):
-    join_server(server_address)
+    try:
+        join_server(server_address)
 
-    time.sleep(2)
+        time.sleep(2)
 
-    intro()
+        intro()
 
-    player_info = load_data()
-
-    show_current_players(server_address)
-
-    response = requests.get(server_address + "/data")
-    data = response.json()
-
-    print(f"Din totala insats: {colors.GREEN}{data["players"][player_info["name"]]["bet"]}{colors.ENDC}")
-
-    current_money = player_info["money"]
-    print(f"Du har just nu {colors.PURPLE}{current_money} MONEY™{colors.ENDC} kvar i din användarprofil.")
-
-    while True:
         player_info = load_data()
-        current_money = player_info["money"]
 
-        update_player_time(server_address)
+        show_current_players(server_address)
 
         response = requests.get(server_address + "/data")
         data = response.json()
 
-        if data["state"] == "lobby": 
-            handle_lobby(server_address)
-        if data["state"] == "in_game":
-            handle_game(server_address)
+        print(f"Din totala insats: {colors.GREEN}{data["players"][player_info["name"]]["bet"]}{colors.ENDC}")
 
-        time.sleep(0.1)
+        current_money = player_info["money"]
+        print(f"Du har just nu {colors.PURPLE}{current_money} MONEY™{colors.ENDC} kvar i din användarprofil.")
+
+        while True:
+            player_info = load_data()
+            current_money = player_info["money"]
+
+            update_player_time(server_address)
+
+            response = requests.get(server_address + "/data")
+            data = response.json()
+
+            if data["state"] == "lobby": 
+                handle_lobby(server_address)
+            if data["state"] == "in_game":
+                handle_game(server_address)
+
+            time.sleep(0.1)
+
+    except Exception as e:
+        print(e)
+        time.sleep(5)
+
+        from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+        display_online_menu()
 
 def handle_lobby(server_address):
     player_info = load_data()
@@ -68,6 +75,9 @@ def handle_lobby(server_address):
     if msvcrt.kbhit():
 
         key = msvcrt.getch()
+
+        while msvcrt.kbhit():
+            key = msvcrt.getch()
 
         if key == b'\r':
             start_server_game(server_address)
@@ -136,6 +146,9 @@ def handle_game(server_address):
 
                 key = msvcrt.getch()
 
+                while msvcrt.kbhit():
+                    key = msvcrt.getch()
+
                 if key == b'j':
                     kast = random.randint(1, 6)
                     total += kast
@@ -163,7 +176,7 @@ def handle_game(server_address):
                 clear_screen()
 
                 winner = data["winner"]
-                print(f"{colors.GREEN}{winner} vann denna runda med en poäng på {data["players"][winner]["score"]}{colors.ENDC}")
+                print(f"{colors.GREEN}{winner} vann denna runda med en totalsumma på {data["players"][winner]["score"]}{colors.ENDC}")
                 print(f"Användaren har en liten hälsning till er förlorare: ")
                 print(f"    {colors.CYAN}{data["players"][winner]["slogan"]}{colors.ENDC}")
                 print(f"Den användaren får nu hela {colors.PURPLE}{data["total_pot"]} MONEY™!{colors.ENDC}")
@@ -176,6 +189,10 @@ def handle_game(server_address):
                     print(f"Grattis! Du vann hela {data["total_pot"]} MONEY™!")
                     player_info["money"] += data["total_pot"]
                     save_data(player_info)
+                    
+                    increase_won_games()
+                else:
+                    increase_lost_games()
 
                 time.sleep(10)
 
@@ -185,8 +202,13 @@ def handle_game(server_address):
                 display_online_menu()
             except Exception as e:
                 print(e)
+                time.sleep(5)
 
-        
+                from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+                display_online_menu()
+
+        update_player_time(server_address)
+
         time.sleep(0.1)
 
 def end_server_game(server_address):
@@ -200,6 +222,10 @@ def end_server_game(server_address):
         )
     except Exception as e:
         print(e)
+        time.sleep(5)
+
+        from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+        display_online_menu()
 
 def submit_score(server_address, score):
     try:
@@ -217,12 +243,14 @@ def submit_score(server_address, score):
             }
         )
 
-        if response.ok:
-            print(f"Spelet har startat!")
-        else:
+        if not response.ok:
             print("Misslyckades:", response.json())
     except Exception as e:
         print(e)
+        time.sleep(5)
+
+        from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+        display_online_menu()
 
 def show_current_players(server_address):
     print(f"{colors.PURPLE}Nuvarande spelare i server:{colors.ENDC}")
@@ -255,6 +283,10 @@ def place_bet(server_address, amount):
             print("Misslyckades:", response.json())
     except Exception as e:
         print(e)
+        time.sleep(5)
+
+        from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+        display_online_menu()
 
 
 def start_server_game(server_address):
@@ -273,6 +305,10 @@ def start_server_game(server_address):
             print("Misslyckades:", response.json())
     except Exception as e:
         print(e)
+        time.sleep(5)
+
+        from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+        display_online_menu()
 
 def join_server(server_address):
     try:
@@ -295,8 +331,16 @@ def join_server(server_address):
             print("Joinade servern!")
         else:
             print("Misslyckades:", response.json())
+            time.sleep(5)
+
+            from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+            display_online_menu()
     except Exception as e:
         print(e)
+        time.sleep(5)
+
+        from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+        display_online_menu()
 
 def update_player_time(server_address):
     try:
@@ -319,3 +363,7 @@ def update_player_time(server_address):
             print("Misslyckades:", response.json())
     except Exception as e:
         print(e)
+        time.sleep(5)
+
+        from core.gamemodes.online_multiplayer.online_multiplayer_menu import display_online_menu
+        display_online_menu()
