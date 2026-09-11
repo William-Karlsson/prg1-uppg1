@@ -1,7 +1,7 @@
 # regler:
 # Spelaren har en tärning (vanlig D6)
 # Resultatet ska efter varje kast läggas på en totalsumma
-# Efter varje kast får spelaren välja om hen vill kasta igen eller sluta kasta
+# Efter varje kast får spelaren välj om hen vill kasta igen eller sluta kasta
 # Målet är att komma så nära 21 som möjligt
 # Om spelaren kommer över 21 så förlorar hen
 # Får spelaren exakt 21 så vinner hen
@@ -16,7 +16,7 @@ def intro():
     print(f'{colors.GREEN}Välkommen till 21!{colors.ENDC}\n')
 
     print("Målet är att komma så nära 21 som möjligt utan att gå över.")
-    print("Du kastar en tärning (D6) och kan välja att kasta igen eller stanna.")
+    print("Du kastar en tärning (D6) och kan välj att kasta igen eller stanna.")
     print("Om du går över 21 förlorar du, om du får exakt 21 vinner du!\n")
 
     print("Om du får under eller över 21 tappar du samma antal MONEY™ som antal nummer ifrån 21 du slagit.")
@@ -25,27 +25,27 @@ def intro():
     print(f'{colors.CYAN}Lycka till!{colors.ENDC}\n')
 
 def ask_play_again():
-    choice = input("\nVill du spela igen? (ja/nej): ").lower()
+    choice = input("\nVill du spela igen? (j/n): ").lower()
 
-    if choice in ['ja', 'nej']:
-        if choice == 'ja':
+    if choice in ['j', 'n']:
+        if choice == 'j':
             play_single_player()
 
-        if choice == 'nej':
+        if choice == 'n':
             from core.main_menu import display_main_menu
 
             display_main_menu()
     else:
-        print(f"{colors.RED}Ogiltigt val. Vänligen skriv 'ja' eller 'nej'.{colors.ENDC}")
+        print(f"{colors.RED}Ogiltigt val. Vänligen skriv 'j' eller 'n'.{colors.ENDC}")
         ask_play_again()
 
 def prompt():
     while True:
-        choice = input("Vill du kasta tärningen? (ja/nej): ").strip().lower()
-        if choice in ['ja', 'nej']:
+        choice = input("Vill du kasta tärningen? (j/n): ").strip().lower()
+        if choice in ['j', 'n']:
             return choice
         else:
-            print(f"{colors.RED}Ogiltigt val. Vänligen skriv 'ja' eller 'nej'.{colors.ENDC}")
+            print(f"{colors.RED}Ogiltigt val. Vänligen skriv 'j' eller 'n'.{colors.ENDC}")
 
 def spel():
     total = 0
@@ -53,7 +53,7 @@ def spel():
     while True:
         choice = prompt().lower()
 
-        if choice == 'nej':
+        if choice == 'n':
             print(f"{colors.PURPLE}Du valde att stanna med totalsumman: {total}.{colors.ENDC}")
             break
 

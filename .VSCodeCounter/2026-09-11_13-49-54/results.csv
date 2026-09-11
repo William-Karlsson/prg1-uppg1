@@ -1,0 +1,16 @@
+"filename", "language", "Python", "JSON", "comment", "blank", "total"
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\gamemodes\online_multiplayer\online_multiplayer_core.py", "Python", 3, 0, 0, 0, 3
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\gamemodes\online_multiplayer\online_multiplayer_game.py", "Python", 197, 0, 0, 74, 271
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\gamemodes\online_multiplayer\online_multiplayer_handler.py", "Python", 68, 0, 0, 21, 89
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\gamemodes\online_multiplayer\online_multiplayer_menu.py", "Python", 23, 0, 1, 11, 35
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\gamemodes\online_multiplayer\online_server.py", "Python", 144, 0, 1, 49, 194
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\gamemodes\single_player.py", "Python", 63, 0, 8, 25, 96
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\main_menu.py", "Python", 28, 0, 1, 13, 42
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\reused_info.py", "Python", 3, 0, 0, 1, 4
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\save_data.py", "Python", 52, 0, 3, 20, 75
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\visuals\clear_screen.py", "Python", 2, 0, 0, 0, 2
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\core\visuals\color.py", "Python", 7, 0, 0, 0, 7
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\main.py", "Python", 32, 0, 1, 16, 49
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\server_data.json", "JSON", 0, 3, 0, 0, 3
+"c:\Users\william.karlsson12\Desktop\prg1-uppg1\test.py", "Python", 9, 0, 0, 4, 13
+"Total", "-", 631, 3, 15, 234, 883
